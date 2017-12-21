@@ -37,13 +37,13 @@ function crc_for_5g(in_bits, crc_type)
     elseif crc_type == "16"
         crc_poly = [1 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 1]
         crc_len  = 16
-    elseif crc_type == "24a"
+    elseif crc_type == "24a" || crc_type == "24A"
         crc_poly = [1 1 0 0 0 0 1 1 0 0 1 0 0 1 1 0 0 1 1 1 1 1 0 1 1]
         crc_len  = 24
-    elseif crc_type == "24b"
+    elseif crc_type == "24b" || crc_type == "24B"
         crc_poly = [1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 1 1]
         crc_len  = 24
-    elseif crc_type == "24c"
+    elseif crc_type == "24c" || crc_type == "24C"
         crc_poly = [1 1 0 1 1 0 0 1 0 1 0 1 1 0 0 0 1 0 0 0 1 0 1 1 1]
         crc_len  = 24
     else
