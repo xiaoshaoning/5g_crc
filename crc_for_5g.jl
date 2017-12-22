@@ -31,7 +31,10 @@
 
 function crc_for_5g(in_bits, crc_type)
     # Check crc_type
-    if crc_type == "11"
+    if crc_type == "6"
+        crc_poly = [1 1 0 0 0 0 1]
+        crc_len = 6;
+    elseif crc_type == "11"
         crc_poly = [1 1 1 0 0 0 1 0 0 0 0 1]
         crc_len  = 11
     elseif crc_type == "16"
@@ -46,7 +49,7 @@ function crc_for_5g(in_bits, crc_type)
     elseif crc_type == "24c" || crc_type == "24C"
         crc_poly = [1 1 0 1 1 0 0 1 0 1 0 1 1 0 0 0 1 0 0 0 1 0 1 1 1]
         crc_len  = 24
-    else
+    else()
         print("ERROR: Invalid crc_type (%s)\n")
         # error('ERROR: Invalid crc_type');
         return 0

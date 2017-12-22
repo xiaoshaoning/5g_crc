@@ -29,7 +29,10 @@
 
 function [crc_bits] = crc_for_5g(in_bits, crc_type)
     % Check crc_type
-    if strcmpi(crc_type,'11')
+    if strcmpi(crc_type, '6')
+        crc_poly = [1, 1, 0, 0, 0, 0, 1];
+        crc_len = 6;
+    elseif strcmpi(crc_type,'11')
         crc_poly = [1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1];
         crc_len  = 11;
     elseif strcmpi(crc_type,'16')
