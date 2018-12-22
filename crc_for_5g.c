@@ -20,8 +20,6 @@ int crc_for_5g(int * crc, int * input_bits, int input_length, int crc_type)
     int step = 0;
     int position = 0;
     int first_one_meet_flag = 0;
-    int real_step = 0;
-    int remainder_step = input_length - 1;
     int accumulated_step = 0;
     
     switch(crc_type)
@@ -66,7 +64,6 @@ int crc_for_5g(int * crc, int * input_bits, int input_length, int crc_type)
 
     while(1)
     {    
-
         for (ii = 0; ii < crc_length+1; ii++)
         {
             temp_list[ii + position] = temp_list[ii + position] ^ crc_polynomial[ii];
@@ -83,16 +80,12 @@ int crc_for_5g(int * crc, int * input_bits, int input_length, int crc_type)
  
         accumulated_step += step;
 
+        /* printf("accumulated step is %d\n", accumulated_step); */
+
         if (accumulated_step >= input_length)
             break;
 
-        if (remainder_step >= step)
-            real_step = step;
-        else
-            real_step = remainder_step;
-
-        position = position + real_step;
-        remainder_step = remainder_step - real_step;
+        position = position + step;
         step = 0;
         first_one_meet_flag = 0;
     }
@@ -107,17 +100,15 @@ int crc_for_5g(int * crc, int * input_bits, int input_length, int crc_type)
 
 int main(int argc, char ** argv)
 {
-    int input_bits[100000];
+    int input_bits[1000];
     int crc[24];
     int index;
     int crc_type = 5;
     int crc_length;
 
-    
-    for(index=0; index < 100000; index++)
+    for(index=0; index < 1000; index++)
         input_bits[index] = 1;
     
-
     if (argc > 1)
         crc_type = atoi(argv[1]);
 
@@ -127,7 +118,7 @@ int main(int argc, char ** argv)
         return 1;
     }
     
-    crc_length = crc_for_5g(crc, input_bits, 100000, crc_type);
+    crc_length = crc_for_5g(crc, input_bits, 1000, crc_type);
 
     for(index=0; index < crc_length; index++)
         printf("%d ", crc[index]);
