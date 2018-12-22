@@ -13,16 +13,15 @@ int crc_for_5g(int * crc, int * input_bits, int input_length, int crc_type)
     
     int crc_length;
 
-    int crc_remainder[25] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     int * temp_list;
     
-    int ii, jj, kk;
+    int ii;
 
     int step = 0;
     int position = 0;
     int first_one_meet_flag = 0;
     int real_step = 0;
-    int remainder_step = input_length;
+    int remainder_step = input_length - 1;
     int accumulated_step = 0;
     
     switch(crc_type)
@@ -65,25 +64,19 @@ int crc_for_5g(int * crc, int * input_bits, int input_length, int crc_type)
         temp_list[ii] = 0;
     }
 
-    position = 0;
-    first_one_meet_flag = 0;
-    step = 0;
-    real_step = 0;
-    remainder_step = input_length - 1;
-
     while(1)
     {    
 
-        for (jj = 0; jj < crc_length+1; jj++)
+        for (ii = 0; ii < crc_length+1; ii++)
         {
-            temp_list[jj + position] = temp_list[jj + position] ^ crc_polynomial[jj];
-            if (temp_list[jj + position] == 0 && !first_one_meet_flag)
+            temp_list[ii + position] = temp_list[ii + position] ^ crc_polynomial[ii];
+            if (temp_list[ii + position] == 0 && !first_one_meet_flag)
             {
                 step++;
             }
             else
             {
-                if (temp_list[jj+position] == 1 && !first_one_meet_flag)
+                if (temp_list[ii+position] == 1 && !first_one_meet_flag)
                     first_one_meet_flag = 1;
             }
         }
