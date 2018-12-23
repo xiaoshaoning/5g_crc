@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 int crc_for_5g(int * crc, int * input_bits, int input_length, int crc_type)
 {
@@ -80,8 +81,6 @@ int crc_for_5g(int * crc, int * input_bits, int input_length, int crc_type)
  
         accumulated_step += step;
 
-        /* printf("accumulated step is %d\n", accumulated_step); */
-
         if (accumulated_step >= input_length)
             break;
 
@@ -100,30 +99,59 @@ int crc_for_5g(int * crc, int * input_bits, int input_length, int crc_type)
 
 int main(int argc, char ** argv)
 {
-    int input_bits[1000];
+    int * input_bits;
     int crc[24];
     int index;
     int crc_type = 5;
     int crc_length;
+    int input_bits_length = 0;
 
-    for(index=0; index < 1000; index++)
-        input_bits[index] = 1;
-    
-    if (argc > 1)
+    if (argc <= 2)
+    {
+        fprintf(stderr, "usage: ./test [crc_type] [input_bits_length]\n");
+        fprintf(stderr, "where crc_type is an integer between 0 and 5, input_bits_length is a integer greater than 0.\n");
+        return 1;
+    }
+
+    if (argc > 2)
+    {    
         crc_type = atoi(argv[1]);
+        input_bits_length = atoi(argv[2]);
+        if (input_bits_length <= 0)
+        {
+            fprintf(stderr, "invalid input length. Please input an input bits length > 0.\n");
+            return 1;
+        }
+    }    
+    input_bits = (int *) malloc(sizeof(int) * input_bits_length);
 
+    srand(time(NULL));
+
+    printf("The input bits are [");
+    for (index=0; index < input_bits_length; index++)
+    {
+        input_bits[index] = rand() & 1;
+        printf("%d ", input_bits[index]);
+    }
+
+    if (input_bits_length > 0)
+        printf("\b");
+    
+    printf("]\n");
+    
     if ( !((crc_type == 0) || (crc_type == 1) || (crc_type == 2) || (crc_type == 3) || (crc_type == 4) || (crc_type == 5)) )
     {
         fprintf(stderr, "invalid crc type. Please input a crc type between 0 and 5.\n");
         return 1;
     }
     
-    crc_length = crc_for_5g(crc, input_bits, 1000, crc_type);
+    crc_length = crc_for_5g(crc, input_bits, input_bits_length, crc_type);
 
+    printf("The CRC is [");
     for(index=0; index < crc_length; index++)
         printf("%d ", crc[index]);
 
-    printf("\n");
+    printf("\b]\n");
 
     return 0;
 }
